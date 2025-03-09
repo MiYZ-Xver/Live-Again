@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mindful Journey</title>
+    <link rel="stylesheet" href="Emotional Healing Home.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Pacifico&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/remixicon@4.5.0/fonts/remixicon.css" rel="stylesheet">
+</head>
+
+<body>
+    <nav class="top-nav">
+        <div class="logo">logo <span class="logo-text">LIVE AGAIN</span></div>
+        <div class="notification-icon">
+            <i class="ri-notification-3-line"></i>
+        </div>
+    </nav>
+    <main>
+        <div class="welcome-section">
+            <h1>Welcome back, Emma</h1>
+            <p>How are you feeling today?</p>
+        </div>
+        <div class="quick-actions">
+            <a href="Guided Meditation Session.html" data-readdy="true" class="action-button">
+                <button class="primary-button clip-edges">
+                    <div class="icon-container">
+                        <i class="ri-mental-health-line"></i>
+                    </div>
+                    <span>Relive</span>
+                </button>
+            </a>
+            <a href="Post-Meditation Painting Page.html" data-readdy="true" class="action-button">
+                <button class="secondary-button clip-edges">
+                    <div class="icon-container">
+                        <i class="ri-paint-brush-line"></i>
+                    </div>
+                    <span>Paint</span>
+                </button>
+            </a>
+            <button class="neutral-button clip-edges">
+                <div class="icon-container">
+                    <i class="ri-book-read-line"></i>
+                </div>
+                <span>Records</span>
+            </button>
+        </div>
+        <div class="journey-section">
+            <h2>Today's Journey</h2>
+            <div class="journey-card">
+                <img src="https://public.readdy.ai/ai/img_res/8b40d2886646f6cd140ea544ef63727c.jpg" alt="Meditation">
+                <h3>Morning Meditation</h3>
+                <p>Start your day with a 10-minute guided meditation</p>
+                <a href="Guided Meditation Session.html" data-readdy="true">
+                    <button class="begin-button">Begin Session</button>
+                </a>
+            </div>
+        </div>
+        <div class="emotions-section">
+            <h2>Recent Emotions</h2>
+            <div class="emotion-scrollable" id="emotionContainer">
+                <div class="emotion-card" onclick="openEmotionDialog()">
+                    <div class="date" id="todayDate">Today</div>
+                    <div class="emoji" id="todayEmoji">📝</div>
+                    <div class="mood" id="todayMood">Add Today's Mood</div>
+                </div>
+                <div class="emotion-card">
+                    <div class="date" id="yesterdayDate">Yesterday</div>
+                    <div class="emoji">😊</div>
+                    <div class="mood">Peaceful</div>
+                </div>
+                <div class="emotion-card">
+                    <div class="date" id="twoDaysAgoDate">2 Days Ago</div>
+                    <div class="emoji">😔</div>
+                    <div class="mood">Reflective</div>
+                </div>
+            </div>
+        </div>
+        <div id="emotionDialog" class="emotion-dialog hidden">
+            <div class="dialog-content">
+                <h3>How are you feeling today?</h3>
+                <div class="emoji-grid">
+                    <button onclick="selectEmoji('😊')" class="emoji-button">😊</button>
+                    <button onclick="selectEmoji('😔')" class="emoji-button">😔</button>
+                    <button onclick="selectEmoji('😌')" class="emoji-button">😌</button>
+                    <button onclick="selectEmoji('🌟')" class="emoji-button">🌟</button>
+                    <button onclick="selectEmoji('😴')" class="emoji-button">😴</button>
+                    <button onclick="selectEmoji('😤')" class="emoji-button">😤</button>
+                    <button onclick="selectEmoji('🥰')" class="emoji-button">🥰</button>
+                    <button onclick="selectEmoji('😢')" class="emoji-button">😢</button>
+                    <button onclick="selectEmoji('😎')" class="emoji-button">😎</button>
+                    <button onclick="selectEmoji('🤔')" class="emoji-button">🤔</button>
+                    <button onclick="selectEmoji('😇')" class="emoji-button">😇</button>
+                    <button onclick="selectEmoji('😍')" class="emoji-button">😍</button>
+                    <button onclick="selectEmoji('🥺')" class="emoji-button">🥺</button>
+                    <button onclick="selectEmoji('😪')" class="emoji-button">😪</button>
+                    <button onclick="selectEmoji('😄')" class="emoji-button">😄</button>
+                    <button onclick="openMoreEmojis()" class="more-button">More</button>
+                </div>
+                <div id="moreEmojisContainer" class="more-emojis hidden">
+                    <div class="emoji-grid">
+                        <button onclick="selectEmoji('🌈')" class="emoji-button">🌈</button>
+                        <button onclick="selectEmoji('✨')" class="emoji-button">✨</button>
+                        <button onclick="selectEmoji('💫')" class="emoji-button">💫</button>
+                        <button onclick="selectEmoji('⭐')" class="emoji-button">⭐</button>
+                        <button onclick="selectEmoji('🌙')" class="emoji-button">🌙</button>
+                        <button onclick="selectEmoji('☀️')" class="emoji-button">☀️</button>
+                        <button onclick="selectEmoji('🌺')" class="emoji-button">🌺</button>
+                        <button onclick="selectEmoji('🍀')" class="emoji-button">🍀</button>
+                        <button onclick="selectEmoji('🎨')" class="emoji-button">🎨</button>
+                        <button onclick="selectEmoji('🎭')" class="emoji-button">🎭</button>
+                        <button onclick="selectEmoji('🎪')" class="emoji-button">🎪</button>
+                        <button onclick="selectEmoji('🎯')" class="emoji-button">🎯</button>
+                    </div>
+                </div>
+                <input type="text" id="moodInput" placeholder="Describe your mood...">
+                <div class="dialog-buttons">
+                    <button onclick="closeEmotionDialog()" class="cancel-button">Cancel</button>
+                    <button onclick="saveEmotion()" class="save-button">Save</button>
+                </div>
+            </div>
+        </div>
+    </main>
+    <nav class="bottom-nav">
+        <div class="nav-grid">
+            <button class="nav-button active">
+                <div class="nav-icon">
+                    <i class="ri-home-5-line"></i>
+                </div>
+                <span>Home</span>
+            </button>
+            <button class="nav-button">
+                <div class="nav-icon">
+                    <i class="ri-compass-3-line"></i>
+                </div>
+                <span>Explore</span>
+            </button>
+            <button class="nav-button">
+                <div class="nav-icon">
+                    <i class="ri-user-line"></i>
+                </div>
+                <span>Profile</span>
+            </button>
+        </div>
+    </nav>
+
+    <script src="emotional-healing-home.js"></script>
+</body>
+
+</html>

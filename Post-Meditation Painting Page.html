@@ -1,0 +1,387 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=375px, initial-scale=1.0">
+  <title>Emotional Painting</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            primary: '#FFE4D6',
+            secondary: '#B7C4B7'
+          },
+          borderRadius: {
+            'none': '0px',
+            'sm': '4px',
+            DEFAULT: '8px',
+            'md': '12px',
+            'lg': '16px',
+            'xl': '20px',
+            '2xl': '24px',
+            '3xl': '32px',
+            'full': '9999px',
+            'button': '8px'
+          }
+        }
+      }
+    }
+  </script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Pacifico&display=swap" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/remixicon@4.5.0/fonts/remixicon.css" rel="stylesheet">
+  <style>
+    :where([class^="ri-"])::before {
+      content: "\f3c2";
+    }
+
+    .canvas-container {
+      touch-action: none;
+    }
+  </style>
+</head>
+
+<body class="w-[375px] h-[762px] mx-auto relative bg-gradient-to-b from-primary/20 to-white">
+  <nav class="fixed top-0 w-full bg-white/80 backdrop-blur-md z-50 px-4 py-3 flex items-center justify-between">
+    <a href="https://readdy.ai/home/d657acd9-72d8-4839-9dfb-25321cc4558f/c9743f47-b712-43e7-9a40-a176f101f8d3"
+      data-readdy="true">
+      <div class="w-8 h-8 flex items-center justify-center cursor-pointer" onclick="showExitConfirmDialog()">
+        <i class="ri-arrow-left-line text-xl"></i>
+      </div>
+    </a>
+    <div class="text-lg font-medium">Let your emotion go</div>
+    <div class="w-8 h-8 flex items-center justify-center cursor-pointer" onclick="toggleSettings()">
+      <i class="ri-settings-3-line text-xl"></i>
+    </div>
+  </nav>
+  <main class="pt-16 pb-20 px-4">
+    <div class="canvas-container relative w-full aspect-[4/3] bg-white rounded-2xl shadow-sm mb-6 overflow-hidden">
+      <canvas id="paintCanvas" class="absolute inset-0 w-full h-full"></canvas>
+      <div id="brushPreview" class="absolute w-4 h-4 rounded-full border-2 border-black pointer-events-none hidden">
+      </div>
+    </div>
+    <div class="flex items-center justify-between mb-4">
+      <div class="flex items-center gap-2">
+        <button onclick="setBrushType('brush')"
+          class="w-10 h-10 rounded-xl bg-white shadow-sm flex items-center justify-center">
+          <i class="ri-brush-line text-xl"></i>
+        </button>
+        <button onclick="setBrushType('marker')"
+          class="w-10 h-10 rounded-xl bg-white shadow-sm flex items-center justify-center">
+          <i class="ri-edit-line text-xl"></i>
+        </button>
+        <button onclick="setBrushType('eraser')"
+          class="w-10 h-10 rounded-xl bg-white shadow-sm flex items-center justify-center">
+          <i class="ri-eraser-line text-xl"></i>
+        </button>
+      </div>
+      <div class="flex items-center gap-2">
+        <button onclick="undo()" class="w-10 h-10 rounded-xl bg-white shadow-sm flex items-center justify-center">
+          <i class="ri-arrow-go-back-line text-xl"></i>
+        </button>
+        <button onclick="redo()" class="w-10 h-10 rounded-xl bg-white shadow-sm flex items-center justify-center">
+          <i class="ri-arrow-go-forward-line text-xl"></i>
+        </button>
+        <button onclick="clearCanvas()"
+          class="w-10 h-10 rounded-xl bg-white shadow-sm flex items-center justify-center">
+          <i class="ri-delete-bin-line text-xl"></i>
+        </button>
+      </div>
+    </div>
+    <div class="bg-white rounded-xl p-4 shadow-sm mb-4">
+      <div class="flex items-center justify-between mb-4">
+        <div class="text-sm font-medium">Brush Size</div>
+        <div class="text-sm text-gray-500" id="brushSizeValue">10px</div>
+      </div>
+      <input type="range" min="1" max="50" value="10" class="w-full" id="brushSize"
+        oninput="updateBrushSize(this.value)">
+    </div>
+    <div class="bg-white rounded-xl p-4 shadow-sm">
+      <div class="text-sm font-medium mb-3">Colors</div>
+      <div class="grid grid-cols-8 gap-2 mb-4">
+        <button onclick="setColor('#000000')" class="w-8 h-8 rounded-full bg-black"></button>
+        <button onclick="setColor('#FF0000')" class="w-8 h-8 rounded-full bg-red-500"></button>
+        <button onclick="setColor('#FFA500')" class="w-8 h-8 rounded-full bg-orange-500"></button>
+        <button onclick="setColor('#FFFF00')" class="w-8 h-8 rounded-full bg-yellow-500"></button>
+        <button onclick="setColor('#008000')" class="w-8 h-8 rounded-full bg-green-500"></button>
+        <button onclick="setColor('#0000FF')" class="w-8 h-8 rounded-full bg-blue-500"></button>
+        <button onclick="setColor('#4B0082')" class="w-8 h-8 rounded-full bg-indigo-500"></button>
+        <button onclick="setColor('#800080')" class="w-8 h-8 rounded-full bg-purple-500"></button>
+      </div>
+      <div class="flex gap-3">
+        <button onclick="showSaveDialog()"
+          class="flex-1 px-4 py-2 bg-primary rounded-button text-sm flex items-center justify-center gap-2">
+          <i class="ri-save-line"></i>
+          Save
+        </button>
+        <button onclick="shareArtwork()"
+          class="flex-1 px-4 py-2 bg-secondary rounded-button text-sm flex items-center justify-center gap-2">
+          <i class="ri-share-line"></i>
+          Share
+        </button>
+      </div>
+    </div>
+  </main>
+  <div id="settingsDialog" class="fixed inset-0 bg-black/50 flex items-center justify-center z-50 hidden">
+    <div class="bg-white rounded-2xl p-6 m-4 w-full max-w-sm">
+      <h3 class="text-lg font-medium mb-4">Settings</h3>
+      <div class="mb-4">
+        <div class="text-sm text-gray-600 mb-2">Background Music</div>
+        <div class="flex items-center gap-4">
+          <div class="w-8 h-8 flex items-center justify-center">
+            <i class="ri-volume-up-line text-xl"></i>
+          </div>
+          <input type="range" class="flex-1 h-1 bg-gray-200 rounded-full appearance-none" min="0" max="100" value="50">
+        </div>
+      </div>
+      <div class="mb-6">
+        <div class="text-sm text-gray-600 mb-2">Canvas Background</div>
+        <div class="grid grid-cols-4 gap-2">
+          <button onclick="setCanvasBackground('white')"
+            class="w-full aspect-square rounded-xl bg-white border"></button>
+          <button onclick="setCanvasBackground('#FFE4D6')" class="w-full aspect-square rounded-xl"
+            style="background-color: #FFE4D6"></button>
+          <button onclick="setCanvasBackground('#B7C4B7')" class="w-full aspect-square rounded-xl"
+            style="background-color: #B7C4B7"></button>
+          <button onclick="setCanvasBackground('#F5F5F5')" class="w-full aspect-square rounded-xl"
+            style="background-color: #F5F5F5"></button>
+        </div>
+      </div>
+      <button onclick="closeSettings()" class="w-full px-4 py-2 rounded-button bg-primary">Close</button>
+    </div>
+  </div>
+  <div id="saveDialog" class="fixed inset-0 bg-black/50 flex items-center justify-center z-50 hidden">
+    <div class="bg-white rounded-2xl p-6 m-4 w-full max-w-sm">
+      <h3 class="text-lg font-medium mb-4">Save Artwork</h3>
+      <div class="mb-4">
+        <input type="text" placeholder="Artwork name" class="w-full px-4 py-2 rounded-button border">
+      </div>
+      <div class="flex gap-3">
+        <button onclick="closeSaveDialog()" class="flex-1 px-4 py-2 rounded-button border">Cancel</button>
+        <button onclick="saveArtwork()" class="flex-1 px-4 py-2 rounded-button bg-primary">Save</button>
+      </div>
+    </div>
+  </div>
+  <div id="exitConfirmDialog" class="fixed inset-0 bg-black/50 flex items-center justify-center z-50 hidden">
+    <div class="bg-white rounded-2xl p-6 m-4 w-full max-w-sm">
+      <h3 class="text-lg font-medium mb-4">Save before leaving?</h3>
+      <p class="text-gray-600 mb-6">Do you want to save your artwork before going back to home?</p>
+      <div class="flex gap-3">
+        <a href="https://readdy.ai/home/d657acd9-72d8-4839-9dfb-25321cc4558f/c9743f47-b712-43e7-9a40-a176f101f8d3"
+          data-readdy="true">
+          <button onclick="exitWithoutSaving()" class="flex-1 px-4 py-2 rounded-button border">Don't Save</button>
+        </a>
+        <button onclick="saveArtwork()" class="flex-1 px-4 py-2 rounded-button bg-primary">Save</button>
+      </div>
+    </div>
+  </div>
+  <script>
+    const canvas = document.getElementById('paintCanvas');
+    const ctx = canvas.getContext('2d');
+    const brushPreview = document.getElementById('brushPreview');
+    let isDrawing = false;
+    let currentColor = '#000000';
+    let currentSize = 10;
+    let currentTool = 'brush';
+    let undoStack = [];
+    let redoStack = [];
+    function initCanvas() {
+      canvas.width = canvas.offsetWidth;
+      canvas.height = canvas.offsetHeight;
+      ctx.fillStyle = 'white';
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+      saveState();
+    }
+    function saveState() {
+      undoStack.push(canvas.toDataURL());
+      redoStack = [];
+    }
+    canvas.addEventListener('mousedown', startDrawing);
+    canvas.addEventListener('mousemove', draw);
+    canvas.addEventListener('mouseup', stopDrawing);
+    canvas.addEventListener('mouseleave', stopDrawing);
+    canvas.addEventListener('touchstart', startDrawing);
+    canvas.addEventListener('touchmove', draw);
+    canvas.addEventListener('touchend', stopDrawing);
+    function startDrawing(e) {
+      isDrawing = true;
+      draw(e);
+    }
+    function draw(e) {
+      if (!isDrawing) return;
+      e.preventDefault();
+      const rect = canvas.getBoundingClientRect();
+      const x = (e.clientX || e.touches[0].clientX) - rect.left;
+      const y = (e.clientY || e.touches[0].clientY) - rect.top;
+      ctx.lineWidth = currentSize;
+      ctx.lineCap = 'round';
+      ctx.strokeStyle = currentTool === 'eraser' ? 'white' : currentColor;
+      ctx.lineTo(x, y);
+      ctx.stroke();
+      ctx.beginPath();
+      ctx.moveTo(x, y);
+    }
+    function stopDrawing() {
+      isDrawing = false;
+      ctx.beginPath();
+      saveState();
+    }
+    function setBrushType(type) {
+      currentTool = type;
+      document.querySelectorAll('[onclick^="setBrushType"]').forEach(btn => {
+        btn.classList.remove('bg-primary');
+      });
+      event.currentTarget.classList.add('bg-primary');
+    }
+    function updateBrushSize(size) {
+      currentSize = size;
+      document.getElementById('brushSizeValue').textContent = size + 'px';
+      brushPreview.style.width = size + 'px';
+      brushPreview.style.height = size + 'px';
+    }
+    function setColor(color) {
+      currentColor = color;
+      document.querySelectorAll('[onclick^="setColor"]').forEach(btn => {
+        btn.classList.remove('ring-4');
+      });
+      event.currentTarget.classList.add('ring-4', 'ring-gray-300');
+    }
+    function undo() {
+      if (undoStack.length > 1) {
+        redoStack.push(undoStack.pop());
+        const img = new Image();
+        img.src = undoStack[undoStack.length - 1];
+        img.onload = () => {
+          ctx.clearRect(0, 0, canvas.width, canvas.height);
+          ctx.drawImage(img, 0, 0);
+        };
+      }
+    }
+    function redo() {
+      if (redoStack.length > 0) {
+        const img = new Image();
+        img.src = redoStack[redoStack.length - 1];
+        img.onload = () => {
+          ctx.clearRect(0, 0, canvas.width, canvas.height);
+          ctx.drawImage(img, 0, 0);
+          undoStack.push(redoStack.pop());
+        };
+      }
+    }
+    function clearCanvas() {
+      ctx.fillStyle = 'white';
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+      saveState();
+    }
+    function toggleSettings() {
+      document.getElementById('settingsDialog').classList.toggle('hidden');
+    }
+    function closeSettings() {
+      document.getElementById('settingsDialog').classList.add('hidden');
+    }
+    function showSaveDialog() {
+      document.getElementById('saveDialog').classList.remove('hidden');
+    }
+    function closeSaveDialog() {
+      document.getElementById('saveDialog').classList.add('hidden');
+    }
+    function showExitConfirmDialog() {
+      document.getElementById('exitConfirmDialog').classList.remove('hidden');
+    }
+    function exitWithoutSaving() {
+      window.location.href = 'https://readdy.ai/home/d657acd9-72d8-4839-9dfb-25321cc4558f/c9743f47-b712-43e7-9a40-a176f101f8d3';
+    }
+    function saveArtwork() {
+      const link = document.createElement('a');
+      link.download = 'artwork.png';
+      link.href = canvas.toDataURL();
+      link.click();
+      closeSaveDialog();
+      document.getElementById('exitConfirmDialog').classList.add('hidden');
+      window.location.href = 'index.html';
+      const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+      const pixels = imageData.data;
+      const particleCount = 10000;
+      const particles = [];
+      for (let i = 0; i < particleCount; i++) {
+        let x, y;
+        do {
+          x = Math.floor(Math.random() * canvas.width);
+          y = Math.floor(Math.random() * canvas.height);
+          const index = (y * canvas.width + x) * 4;
+        } while (pixels[index + 3] === 0);
+        const index = (y * canvas.width + x) * 4;
+        particles.push({
+          x: x,
+          y: y,
+          color: `rgba(${pixels[index]}, ${pixels[index + 1]}, ${pixels[index + 2]}, ${pixels[index + 3] / 255})`,
+          speed: Math.random() * 2 + 1,
+          angle: Math.random() * Math.PI / 2 + Math.PI / 4
+        });
+      }
+      let animationStartTime = null;
+      const animationDuration = 2000;
+      function animate(currentTime) {
+        if (!animationStartTime) animationStartTime = currentTime;
+        const elapsed = currentTime - animationStartTime;
+        const progress = Math.min(elapsed / animationDuration, 1);
+        ctx.fillStyle = 'white';
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+        for (let particle of particles) {
+          ctx.fillStyle = particle.color;
+          ctx.beginPath();
+          ctx.arc(
+            particle.x + Math.cos(particle.angle) * (progress * 100) * particle.speed,
+            particle.y + Math.sin(particle.angle) * (progress * 100) * particle.speed,
+            1,
+            0,
+            Math.PI * 2
+          );
+          ctx.fill();
+        }
+        if (progress < 1) {
+          requestAnimationFrame(animate);
+        } else {
+          ctx.fillStyle = 'white';
+          ctx.fillRect(0, 0, canvas.width, canvas.height);
+          saveState();
+        }
+      }
+      requestAnimationFrame(animate);
+    }
+    function shareArtwork() {
+      canvas.toBlob(blob => {
+        const file = new File([blob], 'artwork.png', { type: 'image/png' });
+        if (navigator.share) {
+          navigator.share({
+            files: [file],
+            title: 'My Artwork',
+            text: 'Check out my emotional painting!'
+          });
+        }
+      });
+    }
+    function setCanvasBackground(color) {
+      ctx.fillStyle = color;
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+      saveState();
+    }
+    initCanvas();
+    canvas.addEventListener('mousemove', (e) => {
+      const rect = canvas.getBoundingClientRect();
+      brushPreview.style.left = (e.clientX - rect.left - currentSize / 2) + 'px';
+      brushPreview.style.top = (e.clientY - rect.top - currentSize / 2) + 'px';
+      brushPreview.style.backgroundColor = currentTool === 'eraser' ? 'white' : currentColor;
+      brushPreview.classList.remove('hidden');
+    });
+    canvas.addEventListener('mouseleave', () => {
+      brushPreview.classList.add('hidden');
+    });
+  </script>
+</body>
+
+</html>

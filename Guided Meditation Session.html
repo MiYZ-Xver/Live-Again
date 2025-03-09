@@ -1,0 +1,386 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=375px, initial-scale=1.0">
+    <title>Morning Meditation</title>
+    <link rel="stylesheet" href="Guided Meditation Session.css">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/echarts/5.5.0/echarts.min.js"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#FFE4D6',
+                        secondary: '#B7C4B7'
+                    },
+                    borderRadius: {
+                        'none': '0px',
+                        'sm': '4px',
+                        DEFAULT: '8px',
+                        'md': '12px',
+                        'lg': '16px',
+                        'xl': '20px',
+                        '2xl': '24px',
+                        '3xl': '32px',
+                        'full': '9999px',
+                        'button': '8px'
+                    }
+                }
+            }
+        }
+    </script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Pacifico&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/remixicon@4.5.0/fonts/remixicon.css" rel="stylesheet">
+</head>
+
+<body class="w-[375px] h-[762px] mx-auto relative bg-gradient-to-b from-primary/20 to-white">
+    <nav class="fixed top-0 w-full bg-white/80 backdrop-blur-md z-50 px-4 py-3 flex items-center justify-between">
+        <a href="https://readdy.ai/home/d657acd9-72d8-4839-9dfb-25321cc4558f/emotional-healing-home" data-readdy="true"
+            class="flex items-center">
+            <div class="w-8 h-8 flex items-center justify-center">
+                <i class="ri-arrow-left-line text-xl"></i>
+            </div>
+        </a>
+        <div class="text-lg font-medium">Morning Meditation</div>
+        <div class="w-8 h-8"></div>
+    </nav>
+    <main class="pt-16 pb-20 px-4 relative min-h-screen">
+        <div class="mb-6">
+            <div class="flex items-center justify-between mb-3">
+                <h2 class="text-lg font-medium">Select Your Mood</h2>
+                <div class="text-sm text-gray-500">2025-03-09</div>
+            </div>
+            <div class="mb-4">
+                <h3 class="text-sm font-medium text-gray-500 mb-2">Primary Emotions</h3>
+                <div class="grid grid-cols-3 gap-3">
+                    <button onclick="selectMood('joy', true)"
+                        class="mood-btn primary-mood-btn p-3 rounded-xl bg-white shadow-sm flex flex-col items-center gap-2 transition-all duration-300">
+                        <i class="ri-emotion-happy-line text-2xl"></i>
+                        <span>Joy</span>
+                    </button>
+                    <button onclick="selectMood('sadness', true)"
+                        class="mood-btn primary-mood-btn p-3 rounded-xl bg-white shadow-sm flex flex-col items-center gap-2">
+                        <i class="ri-emotion-sad-line text-2xl"></i>
+                        <span>Sadness</span>
+                    </button>
+                    <button onclick="selectMood('fear', true)"
+                        class="mood-btn primary-mood-btn p-3 rounded-xl bg-white shadow-sm flex flex-col items-center gap-2">
+                        <i class="ri-emotion-normal-line text-2xl"></i>
+                        <span>Fear</span>
+                    </button>
+                    <button onclick="selectMood('anger', true)"
+                        class="mood-btn primary-mood-btn p-3 rounded-xl bg-white shadow-sm flex flex-col items-center gap-2">
+                        <i class="ri-emotion-angry-line text-2xl"></i>
+                        <span>Anger</span>
+                    </button>
+                    <button onclick="selectMood('surprise', true)"
+                        class="mood-btn primary-mood-btn p-3 rounded-xl bg-white shadow-sm flex flex-col items-center gap-2">
+                        <i class="ri-emotion-laugh-line text-2xl"></i>
+                        <span>Surprise</span>
+                    </button>
+                    <button onclick="selectMood('disgust', true)"
+                        class="mood-btn primary-mood-btn p-3 rounded-xl bg-white shadow-sm flex flex-col items-center gap-2">
+                        <i class="ri-emotion-unhappy-line text-2xl"></i>
+                        <span>Disgust</span>
+                    </button>
+                </div>
+            </div>
+            <div id="secondaryEmotions" class="hidden">
+                <h3 class="text-sm font-medium text-gray-500 mb-2">Secondary Emotions</h3>
+                <div class="grid grid-cols-4 gap-2">
+                    <button onclick="selectMood('hopeful')"
+                        class="mood-btn p-2 rounded-xl bg-white shadow-sm flex flex-col items-center gap-1">
+                        <i class="ri-sun-line text-xl"></i>
+                        <span class="text-xs">Hopeful</span>
+                    </button>
+                    <button onclick="selectMood('proud')"
+                        class="mood-btn p-2 rounded-xl bg-white shadow-sm flex flex-col items-center gap-1">
+                        <i class="ri-award-line text-xl"></i>
+                        <span class="text-xs">Proud</span>
+                    </button>
+                    <button onclick="selectMood('excited')"
+                        class="mood-btn p-2 rounded-xl bg-white shadow-sm flex flex-col items-center gap-1">
+                        <i class="ri-fire-line text-xl"></i>
+                        <span class="text-xs">Excited</span>
+                    </button>
+                    <button onclick="selectMood('delighted')"
+                        class="mood-btn p-2 rounded-xl bg-white shadow-sm flex flex-col items-center gap-1">
+                        <i class="ri-heart-line text-xl"></i>
+                        <span class="text-xs">Delighted</span>
+                    </button>
+                    <button onclick="selectMood('anxious')"
+                        class="mood-btn p-2 rounded-xl bg-white shadow-sm flex flex-col items-center gap-1">
+                        <i class="ri-pulse-line text-xl"></i>
+                        <span class="text-xs">Anxious</span>
+                    </button>
+                    <button onclick="selectMood('insecure')"
+                        class="mood-btn p-2 rounded-xl bg-white shadow-sm flex flex-col items-center gap-1">
+                        <i class="ri-shield-cross-line text-xl"></i>
+                        <span class="text-xs">Insecure</span>
+                    </button>
+                    <button onclick="selectMood('inferior')"
+                        class="mood-btn p-2 rounded-xl bg-white shadow-sm flex flex-col items-center gap-1">
+                        <i class="ri-arrow-down-line text-xl"></i>
+                        <span class="text-xs">Inferior</span>
+                    </button>
+                    <button onclick="selectMood('panic')"
+                        class="mood-btn p-2 rounded-xl bg-white shadow-sm flex flex-col items-center gap-1">
+                        <i class="ri-alarm-warning-line text-xl"></i>
+                        <span class="text-xs">Panic</span>
+                    </button>
+                    <button onclick="selectMood('resentment')"
+                        class="mood-btn p-2 rounded-xl bg-white shadow-sm flex flex-col items-center gap-1">
+                        <i class="ri-forbid-line text-xl"></i>
+                        <span class="text-xs">Resentment</span>
+                    </button>
+                    <button onclick="selectMood('hate')"
+                        class="mood-btn p-2 rounded-xl bg-white shadow-sm flex flex-col items-center gap-1">
+                        <i class="ri-close-circle-line text-xl"></i>
+                        <span class="text-xs">Hate</span>
+                    </button>
+                    <button onclick="selectMood('envy')"
+                        class="mood-btn p-2 rounded-xl bg-white shadow-sm flex flex-col items-center gap-1">
+                        <i class="ri-eye-line text-xl"></i>
+                        <span class="text-xs">Envy</span>
+                    </button>
+                    <button onclick="selectMood('jealous')"
+                        class="mood-btn p-2 rounded-xl bg-white shadow-sm flex flex-col items-center gap-1">
+                        <i class="ri-contrast-2-line text-xl"></i>
+                        <span class="text-xs">Jealous</span>
+                    </button>
+                    <button onclick="selectMood('shame')"
+                        class="mood-btn p-2 rounded-xl bg-white shadow-sm flex flex-col items-center gap-1">
+                        <i class="ri-face-line text-xl"></i>
+                        <span class="text-xs">Shame</span>
+                    </button>
+                    <button onclick="selectMood('neglectful')"
+                        class="mood-btn p-2 rounded-xl bg-white shadow-sm flex flex-col items-center gap-1">
+                        <i class="ri-user-unfollow-line text-xl"></i>
+                        <span class="text-xs">Neglectful</span>
+                    </button>
+                    <button onclick="selectMood('depression')"
+                        class="mood-btn p-2 rounded-xl bg-white shadow-sm flex flex-col items-center gap-1">
+                        <i class="ri-cloud-line text-xl"></i>
+                        <span class="text-xs">Depression</span>
+                    </button>
+                    <button onclick="selectMood('guilty')"
+                        class="mood-btn p-2 rounded-xl bg-white shadow-sm flex flex-col items-center gap-1">
+                        <i class="ri-error-warning-line text-xl"></i>
+                        <span class="text-xs">Guilty</span>
+                    </button>
+                    <button onclick="selectMood('isolated')"
+                        class="mood-btn p-2 rounded-xl bg-white shadow-sm flex flex-col items-center gap-1">
+                        <i class="ri-user-location-line text-xl"></i>
+                        <span class="text-xs">Isolated</span>
+                    </button>
+                    <button onclick="selectMood('shocked')"
+                        class="mood-btn p-2 rounded-xl bg-white shadow-sm flex flex-col items-center gap-1">
+                        <i class="ri-flashlight-line text-xl"></i>
+                        <span class="text-xs">Shocked</span>
+                    </button>
+                    <button onclick="selectMood('dismayed')"
+                        class="mood-btn p-2 rounded-xl bg-white shadow-sm flex flex-col items-center gap-1">
+                        <i class="ri-question-line text-xl"></i>
+                        <span class="text-xs">Dismayed</span>
+                    </button>
+                    <button onclick="selectMood('confused')"
+                        class="mood-btn p-2 rounded-xl bg-white shadow-sm flex flex-col items-center gap-1">
+                        <i class="ri-loop-line text-xl"></i>
+                        <span class="text-xs">Confused</span>
+                    </button>
+                    <button onclick="selectMood('perplexed')"
+                        class="mood-btn p-2 rounded-xl bg-white shadow-sm flex flex-col items-center gap-1">
+                        <i class="ri-mental-health-line text-xl"></i>
+                        <span class="text-xs">Perplexed</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+        <div class="mb-6 hidden" id="sceneSection">
+            <div class="flex justify-between items-center mb-3">
+                <h2 class="text-lg font-medium">Choose Your Scene</h2>
+                <button onclick="showUploadDialog()"
+                    class="px-3 py-1.5 bg-primary/10 text-primary rounded-button text-sm flex items-center gap-1">
+                    <i class="ri-add-line"></i>
+                    Custom Scene
+                </button>
+            </div>
+            <div class="relative">
+                <div class="overflow-x-auto hide-scrollbar pb-4" id="sceneScroll">
+                    <div class="flex gap-3" style="width: max-content">
+                        <button onclick="selectScene('forest')"
+                            class="scene-btn relative w-[160px] h-32 rounded-xl overflow-hidden flex-shrink-0">
+                            <img src="https://public.readdy.ai/ai/img_res/48ae8a5277b01a028851a3fb07ad6732.jpg"
+                                class="absolute inset-0 w-full h-full object-cover" />
+                            <span class="absolute bottom-2 left-2 text-white text-shadow">Forest</span>
+                        </button>
+                        <button onclick="selectScene('beach')"
+                            class="scene-btn relative w-[160px] h-32 rounded-xl overflow-hidden flex-shrink-0">
+                            <img src="https://public.readdy.ai/ai/img_res/3845d4ae75a12a295f84da1cc2ea3ab2.jpg"
+                                class="absolute inset-0 w-full h-full object-cover" />
+                            <span class="absolute bottom-2 left-2 text-white text-shadow">Beach</span>
+                        </button>
+                        <button onclick="selectScene('garden')"
+                            class="scene-btn relative w-[160px] h-32 rounded-xl overflow-hidden flex-shrink-0">
+                            <img src="https://public.readdy.ai/ai/img_res/6bd2a5235261399725905b90ed919aa6.jpg"
+                                class="absolute inset-0 w-full h-full object-cover" />
+                            <span class="absolute bottom-2 left-2 text-white text-shadow">Garden</span>
+                        </button>
+                        <button onclick="selectScene('mountain')"
+                            class="scene-btn relative w-[160px] h-32 rounded-xl overflow-hidden flex-shrink-0">
+                            <img src="https://public.readdy.ai/ai/img_res/ed653a738b77ba884e4bd970ce9def38.jpg"
+                                class="absolute inset-0 w-full h-full object-cover" />
+                            <span class="absolute bottom-2 left-2 text-white text-shadow">Mountain</span>
+                        </button>
+                        <button onclick="selectScene('cozy-room')"
+                            class="scene-btn relative w-[160px] h-32 rounded-xl overflow-hidden flex-shrink-0">
+                            <img src="https://public.readdy.ai/ai/img_res/d7e656720ab3a9fa05e31f81dfe5c5e6.jpg"
+                                class="absolute inset-0 w-full h-full object-cover" />
+                            <span class="absolute bottom-2 left-2 text-white text-shadow">Cozy Room</span>
+                        </button>
+                        <button onclick="selectScene('library')"
+                            class="scene-btn relative w-[160px] h-32 rounded-xl overflow-hidden flex-shrink-0">
+                            <img src="https://public.readdy.ai/ai/img_res/dae11bc157152ec1288fba9da89fe260.jpg"
+                                class="absolute inset-0 w-full h-full object-cover" />
+                            <span class="absolute bottom-2 left-2 text-white text-shadow">Library</span>
+                        </button>
+                        <button onclick="selectScene('studio')"
+                            class="scene-btn relative w-[160px] h-32 rounded-xl overflow-hidden flex-shrink-0">
+                            <img src="https://public.readdy.ai/ai/img_res/098e45890eee29a361e003b9cee8cbd2.jpg"
+                                class="absolute inset-0 w-full h-full object-cover" />
+                            <span class="absolute bottom-2 left-2 text-white text-shadow">Studio</span>
+                        </button>
+                        <button onclick="selectScene('cafe')"
+                            class="scene-btn relative w-[160px] h-32 rounded-xl overflow-hidden flex-shrink-0">
+                            <img src="https://public.readdy.ai/ai/img_res/ce93cf3ff832d3a4000d3a2185a4824c.jpg"
+                                class="absolute inset-0 w-full h-full object-cover" />
+                            <span class="absolute bottom-2 left-2 text-white text-shadow">Cafe</span>
+                        </button>
+                    </div>
+                </div>
+                <div class="mt-4 px-2">
+                    <input type="range" class="w-full h-1 bg-gray-200 rounded-full appearance-none" id="sceneScrollBar"
+                        min="0" max="100" value="0">
+                </div>
+            </div>
+        </div>
+        <div class="mb-6">
+            <h2 class="text-lg font-medium mb-3">Share Your Thoughts</h2>
+            <div class="bg-white rounded-xl p-4 shadow-sm">
+                <textarea id="userThoughts" class="w-full h-24 resize-none border-none focus:ring-0 text-sm"
+                    placeholder="What's on your mind? How would you like to be guided..."></textarea>
+                <div class="flex justify-between items-center mt-3">
+                    <button onclick="startVoiceInput()" class="flex items-center gap-2 text-sm text-gray-600">
+                        <i class="ri-mic-line"></i>
+                        Voice Input
+                    </button>
+                    <button onclick="startMeditationJourney()" class="px-4 py-2 bg-primary rounded-button text-sm">Start
+                        Journey</button>
+                </div>
+            </div>
+        </div>
+        <div class="relative flex flex-col items-center justify-center pt-8 hidden" id="meditationSection">
+            <img src="https://public.readdy.ai/ai/img_res/dfd4cb98fb5a41a9c394154c1882ad21.jpg"
+                class="absolute top-0 w-full h-[300px] object-cover rounded-3xl opacity-50" alt="Meditation Background">
+            <div class="relative z-10 flex flex-col items-center">
+                <div class="relative w-64 h-64 flex items-center justify-center">
+                    <svg class="absolute w-full h-full" viewBox="0 0 120 120">
+                        <circle cx="60" cy="60" r="54" fill="none" stroke="#FFE4D6" stroke-width="2" />
+                        <circle cx="60" cy="60" r="54" fill="none" stroke="#B7C4B7" stroke-width="4"
+                            stroke-dasharray="339.292" stroke-dashoffset="0" transform="rotate(-90 60 60)" />
+                    </svg>
+                    <div class="breathe-circle absolute w-48 h-48 bg-primary/30 rounded-full"></div>
+                    <div class="text-xl" id="breathingText">Inhale</div>
+                </div>
+                <div class="mt-8 flex items-center gap-6">
+                    <button class="w-12 h-12 flex items-center justify-center rounded-full bg-white shadow-md"
+                        onclick="restartSession()">
+                        <i class="ri-restart-line text-xl"></i>
+                    </button>
+                    <button class="w-16 h-16 flex items-center justify-center rounded-full bg-primary shadow-md"
+                        onclick="togglePlayPause()" id="playPauseBtn">
+                        <i class="ri-pause-fill text-2xl"></i>
+                    </button>
+                    <button class="w-12 h-12 flex items-center justify-center rounded-full bg-white shadow-md"
+                        onclick="showEndDialog()">
+                        <i class="ri-close-line text-xl"></i>
+                    </button>
+                </div>
+                <div class="mt-8 w-full">
+                    <div class="flex items-center gap-2 mb-4">
+                        <i class="ri-volume-up-line"></i>
+                        <input type="range" class="w-full h-1 bg-gray-200 rounded-full appearance-none" min="0"
+                            max="100" value="50">
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div id="endSessionDialog" class="fixed inset-0 bg-black/50 flex items-center justify-center z-50 hidden">
+            <div class="bg-white rounded-2xl p-6 m-4 w-full max-w-sm">
+                <h3 class="text-lg font-medium mb-4">End Session?</h3>
+                <p class="text-gray-600 mb-6">Are you sure you want to end your meditation session?</p>
+                <div class="flex gap-3">
+                    <button onclick="closeEndDialog()" class="flex-1 px-4 py-2 rounded-button border">Cancel</button>
+                    <button onclick="endSession()" class="flex-1 px-4 py-2 rounded-button bg-primary">End
+                        Session</button>
+                </div>
+            </div>
+        </div>
+        <div id="completionDialog" class="fixed inset-0 bg-black/50 flex items-center justify-center z-50 hidden">
+            <div class="bg-white rounded-2xl p-6 m-4 w-full max-w-sm">
+                <h3 class="text-lg font-medium mb-4">Session Complete!</h3>
+                <p class="text-gray-600 mb-6">How was your meditation experience?</p>
+                <div class="flex gap-2 justify-center mb-6">
+                    <button onclick="rateSession(1)" class="text-2xl hover:scale-110 transition">⭐</button>
+                    <button onclick="rateSession(2)" class="text-2xl hover:scale-110 transition">⭐</button>
+                    <button onclick="rateSession(3)" class="text-2xl hover:scale-110 transition">⭐</button>
+                    <button onclick="rateSession(4)" class="text-2xl hover:scale-110 transition">⭐</button>
+                    <button onclick="rateSession(5)" class="text-2xl hover:scale-110 transition">⭐</button>
+                </div>
+                <textarea placeholder="Share your insights and reflections..."
+                    class="w-full px-4 py-2 rounded-button border mb-4 h-24"></textarea>
+                <div class="flex gap-3">
+                    <button onclick="saveInsights()"
+                        class="flex-1 px-4 py-2 rounded-button bg-secondary text-white">Save Insights</button>
+                    <button onclick="startPainting()" class="flex-1 px-4 py-2 rounded-button bg-primary">Start
+                        Painting</button>
+                </div>
+            </div>
+        </div>
+    </main>
+    <div id="uploadDialog" class="fixed inset-0 bg-black/50 flex items-center justify-center z-50 hidden" style="display: none !important;">
+        <div class="bg-white rounded-2xl p-6 m-4 w-full max-w-sm">
+            <h3 class="text-lg font-medium mb-4">Add Custom Scene</h3>
+            <div class="mb-4">
+                <label class="block text-sm text-gray-600 mb-2">Scene Name</label>
+                <input type="text" id="customSceneName" class="w-full px-4 py-2 rounded-button border"
+                    placeholder="Enter scene name">
+            </div>
+            <div class="mb-6">
+                <label class="block text-sm text-gray-600 mb-2">Upload Image</label>
+                <input type="file" id="customSceneImage" accept="image/*" class="hidden"
+                    onchange="handleImageUpload(event)">
+                <div id="imagePreview"
+                    class="w-full h-32 rounded-xl border-2 border-dashed border-gray-300 flex items-center justify-center cursor-pointer"
+                    onclick="document.getElementById('customSceneImage').click()">
+                    <div class="text-center text-gray-500">
+                        <i class="ri-image-add-line text-2xl mb-2"></i>
+                        <div class="text-sm">Click to upload image</div>
+                    </div>
+                </div>
+            </div>
+            <div class="flex gap-3">
+                <button onclick="closeUploadDialog()" class="flex-1 px-4 py-2 rounded-button border">Cancel</button>
+                <button onclick="addCustomScene()" class="flex-1 px-4 py-2 rounded-button bg-primary">Add Scene</button>
+            </div>
+        </div>
+    </div>
+    <script src="guided-meditation-session.js"></script>
+</body>
+
+</html>
